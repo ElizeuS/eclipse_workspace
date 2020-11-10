@@ -1,0 +1,61 @@
+
+public class Troco {
+
+	public static int[] trocoMinimo(int[] moedas, int valorTroco) {
+		int quantMoedas = moedas.length;
+		int[] contadorTroco = new int[valorTroco + 1];
+		int[] from = new int[valorTroco + 1];
+		contadorTroco[0] = 1;
+		int p = 0;
+
+		for (int i = 0; i < valorTroco; i++)
+			if (contadorTroco[i] > 0)
+				for (int j = 0; j < quantMoedas; j++) {
+					p = i + moedas[j];
+
+					if (p <= valorTroco) {
+						if (contadorTroco[p] == 0 || contadorTroco[p] > contadorTroco[i] + 1) {
+							contadorTroco[p] = contadorTroco[i] + 1;
+							from[p] = j;
+						}
+					}
+				}
+
+		// Não tem solução:
+		if (contadorTroco[valorTroco] == 0)
+			return null;
+
+		// Construindo a resposta:
+		int[] resultado = new int[contadorTroco[valorTroco] - 1];
+		int k = valorTroco;
+
+		while (k > 0) {
+			resultado[contadorTroco[k] - 2] = moedas[from[k]];
+			k = k - moedas[from[k]];
+		}
+
+		return resultado;
+	}
+
+	public static void main(String[] args) {
+		long tempoInicial = System.currentTimeMillis();
+		int[] moedas = { 1, 2, 3, 4 , 5, 6, 7, 8, 9, 11 };
+		int quantia = 39;
+		
+
+		int[] resultado = trocoMinimo(moedas, quantia);
+
+		if (resultado != null)
+			for (int j = 0; j < resultado.length; j++) {
+				System.out.println(resultado[j]);
+			}
+		else {
+			System.out.println("Nenhuma solução encontrada.");
+		}
+		
+		System.out.println("o metodo executou em " + (System.currentTimeMillis() - tempoInicial));
+	}
+	
+	
+}
+ 
